@@ -21,66 +21,65 @@
             string command;
 
             while ((command = Console.ReadLine()) != "Christmas morning" && presentsCount > 0)
-            {
+            {                
                 int nextRow = rowSanta;
                 int nextCol = colSanta;
                 SantaMovement(command, ref nextRow, ref nextCol);
+                
+                char nextSymbol = neighborhood[nextRow][nextCol];
 
-                char nextElement = neighborhood[nextRow][nextCol];
-
-                if (nextElement == 'V')
+                if (nextSymbol == 'V')
                 {
                     presentsCount--;
                     niceKids++;
-                }                
-                else if (nextElement == 'C')
-                {
+                }
+                else if (nextSymbol == 'C')
+                {                    
                     GiveGiftsToAllAround(ref presentsCount, nextRow, nextCol);
                 }
-
+                                
                 neighborhood[rowSanta][colSanta] = '-';
                 neighborhood[nextRow][nextCol] = 'S';
-
+                                
                 rowSanta = nextRow;
                 colSanta = nextCol;
             }
 
-            if (command != "Christmas morning" && presentsCount == 0)                
-            {
+            if (command != "Christmas morning" && presentsCount == 0)
+            {                
                 Console.WriteLine("Santa ran out of presents!");
             }
 
             PrintNeighborhood(neighborhood);
 
-            int n = 0;
-            int niceKidsLeft = CountOfNiceKidsLeft(n);
-
-            if (niceKidsLeft == 0)
+            int niceKidsLeftCount = CountOfNiceKidsLeft(size);
+            
+            if (niceKidsLeftCount == 0)
             {
                 Console.WriteLine($"Good job, Santa! {niceKids} happy nice kid/s.");
             }
             else
             {
-                Console.WriteLine($"No presents for {niceKidsLeft} nice kid/s.");
+                Console.WriteLine($"No presents for {niceKidsLeftCount} nice kid/s.");
             }
-        }        
+        }
 
-        private static int CountOfNiceKidsLeft(int n)
+        private static int CountOfNiceKidsLeft(int size)
         {
-            int niceKidsLeft = 0;
+            int niceKidsLeftCount = 0;
 
-            for (int row = 0; row < n; row++)
+            for (int row = 0; row < size; row++)
             {
-                for (int col = 0; col < n; col++)
+                for (int col = 0; col < size; col++)
                 {
                     if (neighborhood[row][col] == 'V')
                     {
-                        niceKidsLeft++;
+                        niceKidsLeftCount++;
                     }
                 }
             }
 
-            return niceKidsLeft;
+            return niceKidsLeftCount;
         }
 
         private static void PrintNeighborhood(char[][] neighborhood)
@@ -91,40 +90,44 @@
 
                 Console.WriteLine(String.Join(" ", currentRow));
             }
-        }        
+        }
 
         private static void GiveGiftsToAllAround(ref int presentsCount, int nextRow, int nextCol)
         {
             int countOfGiftsGiven = 0;
-
+            
             if (IsKidOnCoordinates(nextRow, nextCol - 1))
             {
-                ProceedCookies(nextRow, nextCol - 1, ref countOfGiftsGiven);
-            }
-            else if (IsKidOnCoordinates(nextRow, nextCol + 1))
-            {
-                ProceedCookies(nextRow, nextCol + 1, ref countOfGiftsGiven);
-            }
-            else if (IsKidOnCoordinates(nextRow - 1, nextCol))
-            {
-                ProceedCookies(nextRow - 1, nextCol, ref countOfGiftsGiven);
-            }
-            else if (IsKidOnCoordinates(nextRow + 1, nextCol))
-            {
-                ProceedCookies(nextRow + 1, nextCol, ref countOfGiftsGiven);
+                ProceedCookie(nextRow, nextCol - 1, ref countOfGiftsGiven);
             }
 
+            if (IsKidOnCoordinates(nextRow, nextCol + 1))
+            {
+                ProceedCookie(nextRow, nextCol + 1, ref countOfGiftsGiven);
+            }
+
+            if (IsKidOnCoordinates(nextRow - 1, nextCol))
+            {                
+                ProceedCookie(nextRow - 1, nextCol, ref countOfGiftsGiven);
+            }
+
+            if (IsKidOnCoordinates(nextRow + 1, nextCol))
+            {
+                ProceedCookie(nextRow + 1, nextCol, ref countOfGiftsGiven);
+            }
+            
             presentsCount -= countOfGiftsGiven;
         }
 
-        private static void ProceedCookies(int nextRow, int nextCol, ref int countOfGiftsGiven)
+        private static void ProceedCookie(int nextRow, int nextCol, ref int countOfGiftsGiven)
         {
             if (neighborhood[nextRow][nextCol] == 'V')
             {
                 niceKids++;
             }
-            
+                        
             neighborhood[nextRow][nextCol] = '-';
+
             countOfGiftsGiven++;
         }
 
