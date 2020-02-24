@@ -1,15 +1,15 @@
-﻿namespace P01.OddLines
+﻿namespace P03.LineNumbers
 {
-    using System;
     using System.IO;
 
     class Program
     {
         static void Main()
         {
-            using var reader = new StreamReader("text.txt");
+            using var reader = new StreamReader("Input.txt");
+            using var writer = new StreamWriter("Output.txt");
 
-            int count = 0;
+            int count = 1;
 
             while (true)
             {
@@ -20,10 +20,9 @@
                     break;
                 }
 
-                if (count % 2 == 1)
-                {
-                    Console.WriteLine(line);
-                }
+                var convertedLine = $"{count}. {line}";
+
+                writer.WriteLine(convertedLine);
 
                 count++;
             }
